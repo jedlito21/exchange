@@ -45,9 +45,9 @@ def number(*args):
         to_eur = test[first_currency]
         to_curr = test[second_currency]
         math = money / to_eur * to_curr
-        messagebox.showinfo("Result", f"Za {round(money, 2)} {first_currency} budete mít {round(math, 2)} {second_currency}")
+        result_label.config(text=f"Za: {round(money, 2)} {first_currency} \n Budete mít: {round(math, 2)} {second_currency}",padx=10, pady=10)
     except ValueError:
-        messagebox.showerror("Chyba", "Zadej platné číslo.")
+        result_label.config(text="Zadej platné číslo.", pady=10)
 
 #listing currencies
 currencies = []
@@ -56,8 +56,8 @@ for index, (key, value) in enumerate(json_data.items()):
 
 #tkinter
 win = Tk()
-win.geometry("300x240")
-win.minsize(300, 250)
+win.geometry("300x300")
+win.minsize(300, 300)
 win.title("Exchanger")
 win.configure(bg="#262626")
 
@@ -102,6 +102,10 @@ cislo.pack(pady=10)
 
 potvrdit = ttk.Button(win, text="Potvrdit", command=number)
 potvrdit.pack()
+
+result_label = Label(win, text="", width=30, bg="#262626", fg="red", font=custom_font)
+result_label.pack()
+
 
 win.bind('<Return>', on_enter_press)
 
