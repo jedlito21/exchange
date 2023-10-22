@@ -1,8 +1,9 @@
 import requests
 import json
 from tkinter import *
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 import os
+import tkinter.font
 
 #api to my file
 api = requests.get('http://api.exchangeratesapi.io/v1/latest?access_key=187cb0fb71a43cf71f6c1e9acc70d216')
@@ -55,8 +56,26 @@ for index, (key, value) in enumerate(json_data.items()):
 
 #tkinter
 win = Tk()
-win.geometry("300x200")
-win.title("exchanger")
+win.geometry("300x240")
+win.minsize(300, 250)
+win.title("Exchanger")
+win.configure(bg="#262626")
+
+style = ttk.Style()
+style.configure("TButton",
+                font=("Arial", 12),
+                padding=10,
+                background="#262626",
+                foreground="#262626"
+                )
+
+style.configure("TCombobox",
+                font=("Arial", 12),
+                padding=10,
+                selectbackground="#2880BA",
+                foreground="#262626"
+                )
+custom_font = tkinter.font.Font( family = "Arial", size = 12, weight = "bold")
 
 options = StringVar(win)
 options.set("")
@@ -64,22 +83,24 @@ options.set("")
 options2 = StringVar(win)
 options2.set("")
 
-text1 = Label(win,  text='Vybete vaši měnu', width=15)
+text1 = Label(win, text='Vybete vaši měnu', width=15, bg="#262626", fg="white", font=custom_font)
 text1.pack()
 
-om1 = OptionMenu(win, options, *currencies)
+om1 = ttk.Combobox(win, textvariable=options, values=currencies)
+om1.set(currencies[0])
 om1.pack()
 
-text2 = Label(win,  text='Vybete měnu do které chcete vyměnit peníze', width=40 )
+text2 = Label(win, text='Vybete měnu do které chcete \n vyměnit peníze', width=40, bg="#262626", fg="white", font=custom_font)
 text2.pack()
 
-om2 = OptionMenu(win, options2, *currencies)
+om2 = ttk.Combobox(win, textvariable=options2, values=currencies)
+om2.set(currencies[1])
 om2.pack()
 
 cislo = Entry(win, width=20)
 cislo.pack(pady=10)
 
-potvrdit = Button(win, text="Potvrdit", command=number)
+potvrdit = ttk.Button(win, text="Potvrdit", command=number)
 potvrdit.pack()
 
 win.bind('<Return>', on_enter_press)
