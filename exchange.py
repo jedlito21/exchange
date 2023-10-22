@@ -2,13 +2,38 @@ import requests
 import json
 from tkinter import *
 from tkinter import messagebox
+import os
 
 #api to my file
 api = requests.get('http://api.exchangeratesapi.io/v1/latest?access_key=187cb0fb71a43cf71f6c1e9acc70d216')
 data = api.json()
 test = data["rates"]
-api = str(api)
+api_response = str(api)
 
+def save_to_json(data):
+    if os.path.exists('currencies.json'):
+        with open('currencies.json', 'r') as file:
+            currencies_data = json.load(file)
+    else:
+        currencies_data = {}
+
+    currencies_data.update(data)
+
+    with open('currencies.json', 'w') as file:
+        json.dump(currencies_data, file, indent=2)
+
+if api_response == "<Response [200]>":
+            save_to_json(test)
+
+def load_from_json():
+    if os.path.exists('currencies.json'):
+        with open('currencies.json', 'r') as file:
+            currencies_data = json.load(file)
+        return currencies_data
+    else:
+        return {}
+
+json_data = load_from_json()
 def on_enter_press(event):
     number()
 def number(*args):
@@ -23,14 +48,9 @@ def number(*args):
     except ValueError:
         messagebox.showerror("Chyba", "Zadej platné číslo.")
 
-
-if api == "<Response [200]>":
-    with open('venv/currencies.json', 'w') as outfile:
-        json.dump(test, outfile)
-
 #listing currencies
 currencies = []
-for index, (key, value) in enumerate(test.items()):
+for index, (key, value) in enumerate(json_data.items()):
     currencies.append(key)
 
 #tkinter
